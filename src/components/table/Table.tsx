@@ -3,6 +3,7 @@ import {
   useReactTable,
   getCoreRowModel,
   getFilteredRowModel,
+  getPaginationRowModel,
   flexRender,
 } from "@tanstack/react-table";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -19,64 +20,30 @@ interface User {
 const defaultData: User[] = [
   { id: 1, name: "John Doe", email: "john@example.com", role: "Admin" },
   { id: 2, name: "Jane Smith", email: "jane@example.com", role: "User" },
+  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
   { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
+  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
+  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
+  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
+  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
+  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
+  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
+  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
+  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
+  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
+  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
+  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
+  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
+  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
+  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
+  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
+  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
+  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
 ];
 
 const Table: React.FC = () => {
   const [globalFilter, setGlobalFilter] = useState("");
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
 
   const columns = useMemo<ColumnDef<User>[]>(
     () => [
@@ -88,20 +55,21 @@ const Table: React.FC = () => {
     []
   );
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data: defaultData,
     columns,
-    state: { globalFilter },
+    state: { globalFilter, pagination },
+    onPaginationChange: setPagination,
     globalFilterFn: (row, columnId, filterValue) => {
       const value = row.getValue(columnId);
-
-      const stringValue =
-        value !== undefined && value !== null ? String(value) : "";
-
-      return stringValue.toLowerCase().includes(filterValue.toLowerCase());
+      return String(value || "")
+        .toLowerCase()
+        .includes(String(filterValue).toLowerCase());
     },
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
@@ -142,12 +110,17 @@ const Table: React.FC = () => {
             ))}
           </tbody>
         </table>
+
         <Pagination
-          pageIndex={table.getState().pagination.pageIndex}
+          pageIndex={pagination.pageIndex}
           pageCount={table.getPageCount()}
-          pageSize={table.getState().pagination.pageSize}
-          onPageChange={(page) => table.setPageIndex(page)}
-          onPageSizeChange={(size) => table.setPageSize(size)}
+          pageSize={pagination.pageSize}
+          onPageChange={(page) =>
+            setPagination((prev) => ({ ...prev, pageIndex: page }))
+          }
+          onPageSizeChange={(size) =>
+            setPagination({ pageIndex: 0, pageSize: size })
+          }
         />
       </div>
     </div>
