@@ -1,10 +1,13 @@
 import { Menu } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 interface TopbarProps {
   onToggleSidebar: () => void;
 }
 
 const Topbar = ({ onToggleSidebar }: TopbarProps) => {
+  const { pathname } = useLocation();
+
   return (
     <nav className="h-14 bg-black border-b border-gray-800 px-4 flex items-center justify-between text-white">
       <div className="flex items-center gap-1">
@@ -15,7 +18,13 @@ const Topbar = ({ onToggleSidebar }: TopbarProps) => {
           <Menu size={24} />
         </button>
 
-        <h1 className="text-lg font-semibold">Dashboard</h1>
+        <h1 className="text-lg font-semibold">
+          {[
+            pathname === "/"
+              ? "Home"
+              : pathname.replace("/", "").replace(/^./, (c) => c.toUpperCase()),
+          ]}
+        </h1>
       </div>
 
       <div className="flex items-center gap-6">
@@ -32,4 +41,3 @@ const Topbar = ({ onToggleSidebar }: TopbarProps) => {
 };
 
 export default Topbar;
-  

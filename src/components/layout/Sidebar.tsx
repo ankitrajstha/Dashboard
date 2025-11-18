@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import { NavbarItems } from "../../constants/navbar";
 import { X } from "lucide-react";
 
@@ -44,10 +45,14 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                   className="p-4 hover:text-black hover:bg-white rounded-2xl transition-colors cursor-pointer"
                   key={navbarItem.id}
                 >
-                  <div className="flex items-center gap-4">
+                  <NavLink
+                    to={navbarItem.path}
+                    className="flex items-center gap-4"
+                    onClick={onClose}
+                  >
                     <Icon size={24} strokeWidth={1.8} />
                     {navbarItem.label}
-                  </div>
+                  </NavLink>
                 </li>
               );
             })}
