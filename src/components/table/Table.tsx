@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useState } from "react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -10,54 +10,25 @@ import type { ColumnDef } from "@tanstack/react-table";
 import Searchbox from "../ui/Searchbox";
 import Pagination from "./Pagination";
 
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
+interface TableProps<T> {
+  data: T[];
+  columns: ColumnDef<T>[];
+  isLoading?: boolean;
+  isError?: boolean;
 }
 
-const defaultData: User[] = [
-  { id: 1, name: "John Doe", email: "john@example.com", role: "Admin" },
-  { id: 2, name: "Jane Smith", email: "jane@example.com", role: "User" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
-  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
-  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
-  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
-  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
-  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
-  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
-  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
-  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
-  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
-  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
-  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
-  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
-  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
-  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
-  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
-  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
-  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
-  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "Moderator" },
-];
-
-const Table: React.FC = () => {
+const Table = <T,>({
+  data,
+  columns,
+  isLoading = false,
+  isError = false,
+}: TableProps<T>) => {
   const [globalFilter, setGlobalFilter] = useState("");
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
 
-  const columns = useMemo<ColumnDef<User>[]>(
-    () => [
-      { accessorKey: "id", header: "ID" },
-      { accessorKey: "name", header: "Name" },
-      { accessorKey: "email", header: "Email" },
-      { accessorKey: "role", header: "Role" },
-    ],
-    []
-  );
-
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
-    data: defaultData,
+    data,
     columns,
     state: { globalFilter, pagination },
     onPaginationChange: setPagination,
@@ -71,6 +42,13 @@ const Table: React.FC = () => {
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error fetching data.</div>;
+
+  if (!data.length) return <div>No data available.</div>;
+
+  const hasFilteredResults = table.getFilteredRowModel().rows.length > 0;
 
   return (
     <div className="p-4">
@@ -96,32 +74,48 @@ const Table: React.FC = () => {
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr
-                key={row.id}
-                className="hover:bg-gray-50 hover:text-black transition-colors"
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="p-2 border-b border-gray-300">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
+            {hasFilteredResults ? (
+              table.getRowModel().rows.map((row) => (
+                <tr
+                  key={row.id}
+                  className="hover:bg-gray-50 hover:text-black transition-colors"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id} className="p-2 border-b border-gray-300">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan={columns.length}
+                  className="p-4 text-center text-gray-500"
+                >
+                  No results found for "{globalFilter}".
+                </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
 
-        <Pagination
-          pageIndex={pagination.pageIndex}
-          pageCount={table.getPageCount()}
-          pageSize={pagination.pageSize}
-          onPageChange={(page) =>
-            setPagination((prev) => ({ ...prev, pageIndex: page }))
-          }
-          onPageSizeChange={(size) =>
-            setPagination({ pageIndex: 0, pageSize: size })
-          }
-        />
+        {hasFilteredResults && (
+          <Pagination
+            pageIndex={pagination.pageIndex}
+            pageCount={table.getPageCount()}
+            pageSize={pagination.pageSize}
+            onPageChange={(page) =>
+              setPagination((prev) => ({ ...prev, pageIndex: page }))
+            }
+            onPageSizeChange={(size) =>
+              setPagination({ pageIndex: 0, pageSize: size })
+            }
+          />
+        )}
       </div>
     </div>
   );
