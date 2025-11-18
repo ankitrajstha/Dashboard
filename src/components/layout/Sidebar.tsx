@@ -35,7 +35,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           Logo
         </div>
 
-        <nav className="mt-10 w-full">
+        <nav className="mt-10 py-5 w-full border-t border-gray-800">
           <ul className="space-y-4 text-gray-300">
             {NavbarItems.map((navbarItem) => {
               const Icon = navbarItem.icon;

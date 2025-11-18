@@ -19,8 +19,12 @@ const Topbar = ({ onToggleSidebar }: TopbarProps) => {
       </div>
 
       <div className="flex items-center gap-6">
-        <div className="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center cursor-pointer">
-          <div className="w-5 h-5 text-gray-300" />
+        <div className="w-9 h-9 rounded-full overflow-hidden cursor-pointer">
+          <img
+            src="https://plus.unsplash.com/premium_photo-1671656349218-5218444643d8?w=900&auto=format&fit=crop&q=60"
+            alt="avatar"
+            className="w-full h-full object-cover"
+          />
         </div>
       </div>
     </nav>
@@ -28,3 +32,4 @@ const Topbar = ({ onToggleSidebar }: TopbarProps) => {
 };
 
 export default Topbar;
+  

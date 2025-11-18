@@ -15,7 +15,7 @@ const Layout = () => {
         <div className="flex-1 flex flex-col">
           <TopBar onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)} />
           <main className="flex-1 overflow-y-auto p-6 bg-black">
-            <div>Contentz</div>
+            
           </main>
         </div>
       </div>
