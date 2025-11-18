@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -76,7 +76,7 @@ const defaultData: User[] = [
 ];
 
 const Table: React.FC = () => {
-  // const [globalFilter, setGlobalFilter] = useState("");
+  const [globalFilter, setGlobalFilter] = useState("");
 
   const columns = useMemo<ColumnDef<User>[]>(
     () => [
@@ -91,11 +91,10 @@ const Table: React.FC = () => {
   const table = useReactTable({
     data: defaultData,
     columns,
-    // state: { globalFilter },
+    state: { globalFilter },
     globalFilterFn: (row, columnId, filterValue) => {
       const value = row.getValue(columnId);
 
-      // Convert everything to string safely
       const stringValue =
         value !== undefined && value !== null ? String(value) : "";
 
@@ -107,7 +106,7 @@ const Table: React.FC = () => {
 
   return (
     <div className="p-4">
-      <Searchbox />
+      <Searchbox onSetGlobalFilter={setGlobalFilter} />
 
       <div className="overflow-x-auto">
         <table className="min-w-full border border-gray-300">
@@ -130,7 +129,10 @@ const Table: React.FC = () => {
           </thead>
           <tbody>
             {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="hover:bg-gray-50 hover:text-black transition-colors">
+              <tr
+                key={row.id}
+                className="hover:bg-gray-50 hover:text-black transition-colors"
+              >
                 {row.getVisibleCells().map((cell) => (
                   <td key={cell.id} className="p-2 border-b border-gray-300">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
