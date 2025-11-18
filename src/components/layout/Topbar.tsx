@@ -1,7 +1,20 @@
-const Topbar = () => {
+import { Menu } from "lucide-react";
+
+interface TopbarProps {
+  onToggleSidebar: () => void;
+}
+
+const Topbar = ({ onToggleSidebar }: TopbarProps) => {
   return (
-    <nav className="h-14 bg-gray-900 border-b border-gray-800 px-6 flex items-center justify-between text-white">
-      <div className="flex items-center gap-4">
+    <nav className="h-14 bg-black border-b border-gray-800 px-4 flex items-center justify-between text-white">
+      <div className="flex items-center gap-1">
+        <button
+          onClick={onToggleSidebar}
+          className="lg:hidden p-2 hover:bg-gray-800 rounded-md"
+        >
+          <Menu size={24} />
+        </button>
+
         <h1 className="text-lg font-semibold">Dashboard</h1>
       </div>
 
