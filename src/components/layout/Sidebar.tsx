@@ -41,14 +41,18 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
             {NavbarItems.map((navbarItem) => {
               const Icon = navbarItem.icon;
               return (
-                <li
-                  className="p-4 hover:text-black hover:bg-white rounded-2xl transition-colors cursor-pointer"
-                  key={navbarItem.id}
-                >
+                <li className="w-full" key={navbarItem.id}>
                   <NavLink
                     to={navbarItem.path}
-                    className="flex items-center gap-4"
                     onClick={onClose}
+                    className={({ isActive }) =>
+                      `flex items-center gap-4 w-full px-4 py-4 rounded-2xl transition-colors cursor-pointer
+           ${
+             isActive
+               ? "bg-white text-black"
+               : "text-gray-300 hover:bg-white hover:text-black"
+           }`
+                    }
                   >
                     <Icon size={24} strokeWidth={1.8} />
                     {navbarItem.label}
