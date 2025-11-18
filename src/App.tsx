@@ -2,7 +2,7 @@ import type React from "react";
 import Layout from "./components/layout/Layout";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
-import { Data } from "./pages/Data";
+import Data from "./pages/Data";
 import PageNotFound from "./pages/PageNotFound";
 
 const App: React.FC = () => {
